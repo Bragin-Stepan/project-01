@@ -73,7 +73,7 @@ public class BoundaryGame : MonoBehaviour
 
     private void SetupBird()
     {
-        _bird.gameObject.SetActive(true);
+        Extensions.On(_bird.gameObject);
         SetObjectPosition(_bird.gameObject, 0, 0.5f, 0);
 
         _birdRigidbody.isKinematic = false;
@@ -101,7 +101,7 @@ public class BoundaryGame : MonoBehaviour
     private void LoseGame()
     {
         _gameOverMessage = Message.Lose;
-        _bird.gameObject.SetActive(false);
+        Extensions.Off(_bird.gameObject);
         _isRunning = false;
     }
 
