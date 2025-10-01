@@ -3,6 +3,7 @@ using UnityEngine;
 public class BoundaryGame : MonoBehaviour
 {
     [SerializeField] private Bird _bird;
+    [SerializeField] private Vector3 _defaultBirdPosition = new Vector3(0, 0.5f, 0);
     [SerializeField] private float _winScore;
 
     [SerializeField] private GameObject _upperBoundary;
@@ -74,22 +75,19 @@ public class BoundaryGame : MonoBehaviour
     private void SetupBird()
     {
         Extensions.On(_bird.gameObject);
-        SetObjectPosition(_bird.gameObject, 0, 0.5f, 0);
 
-        _birdRigidbody.isKinematic = false;
+        _bird.gameObject.transform.position = _defaultBirdPosition;
         _birdRigidbody.velocity = Vector3.zero;
+        _birdRigidbody.isKinematic = false;
     }
 
     private void SetupBoundaries()
     {
-        SetObjectPosition(_upperBoundary, 0, _verticalLimit, 0);
-        SetObjectPosition(_lowerBoundary, 0, -_verticalLimit, 0);
-        SetObjectPosition(_leftBoundary, -_horizontalLimit, 0, 0);
-        SetObjectPosition(_rightBoundary, _horizontalLimit, 0, 0);
+        _upperBoundary.transform.position = new Vector3(0, _verticalLimit, 0);
+        _lowerBoundary.transform.position = new Vector3(0, -_verticalLimit, 0);
+        _leftBoundary.transform.position = new Vector3(-_horizontalLimit, 0, 0);
+        _rightBoundary.transform.position = new Vector3(_horizontalLimit, 0, 0);
     }
-
-    private void SetObjectPosition(GameObject boundary, float x, float y, float z)
-        => boundary.transform.position = new Vector3(x, y, z);
 
     private void WinGame()
     {
