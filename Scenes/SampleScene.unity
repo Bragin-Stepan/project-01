@@ -671,8 +671,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jumpForce: {x: 8, y: 7, z: 0}
   _horizontalJumpMultiplier: 0.5
-  _baseScoreAdd: 1
-  _extraScoreAdd: 2
 --- !u!54 &393381163
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1009,6 +1007,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 490274063}
+  - component: {fileID: 490274064}
   m_Layer: 0
   m_Name: Boundary
   m_TagString: Untagged
@@ -1035,6 +1034,22 @@ Transform:
   - {fileID: 2005371979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &490274064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490274062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f2ef2dc9f750b4ea796719715f3838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _upperBoundary: {fileID: 90884475}
+  _lowerBoundary: {fileID: 127410594}
+  _leftBoundary: {fileID: 2005371975}
+  _rightBoundary: {fileID: 378577490}
 --- !u!1 &504034680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,13 +1719,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bird: {fileID: 393381162}
+  _boundary: {fileID: 490274064}
   _winScore: 50
-  _upperBoundary: {fileID: 90884475}
-  _lowerBoundary: {fileID: 127410594}
-  _leftBoundary: {fileID: 2005371975}
-  _rightBoundary: {fileID: 378577490}
-  _verticalLimit: 5
-  _horizontalLimit: 6
+  _verticalScoreAdd: 1
+  _horizontalScoreAdd: 3
+  _defaultBirdPosition: {x: 0, y: 0.5, z: 0}
+  _boundaryLimit: {x: 6, y: 5}
   _showDebugGui: 1
 --- !u!4 &1271380589
 Transform:

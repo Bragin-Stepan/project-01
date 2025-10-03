@@ -5,13 +5,11 @@ public class Bird : MonoBehaviour
 {
     [SerializeField] private Vector3 _jumpForce;
     [SerializeField] private float _horizontalJumpMultiplier;
-    [SerializeField] private int _baseScoreAdd = 1;
-    [SerializeField] private int _extraScoreAdd = 2;
+
+    public int VerticalJumpCounter { get; private set; }
+    public int HorizontalJumpCounter { get; private set; }
 
     private Rigidbody _rigidbody;
-
-    private int _jumpScore;
-    public int JumpScore => _jumpScore;
 
     private void Awake()
     {
@@ -30,23 +28,34 @@ public class Bird : MonoBehaviour
             HorizontalJump(_jumpForce.x);
     }
 
+    public void ResetJumpCounter()
+    {
+        VerticalJumpCounter = 0;
+        HorizontalJumpCounter = 0;
+    }
+    public void Teleport(Vector3 position) => transform.position = position;
+
+    public void Freeze() => _rigidbody.isKinematic = true;
+
+    public void Unfreeze()
+    {
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = Vector3.zero;
+    }
+
     private void BaseJump()
     {
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.AddForce(new Vector3(0, _jumpForce.y, 0), ForceMode.Impulse);
-        AddScore();
+
+        VerticalJumpCounter++;
     }
 
     private void HorizontalJump(float forceX)
     {
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.AddForce(new Vector3(forceX, _jumpForce.y * _horizontalJumpMultiplier, 0), ForceMode.Impulse);
-        AddScore(_extraScoreAdd);
+
+        HorizontalJumpCounter++;
     }
-
-    private void AddScore(int extraAmount = 0)
-        => _jumpScore = _jumpScore + _baseScoreAdd + extraAmount;
-
-    public void ResetScore()
-        => _jumpScore = 0;
 }
