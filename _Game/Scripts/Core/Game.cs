@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] private Bird _bird;
+    [SerializeField] private Character _character;
     [SerializeField] private Boundary _boundary;
 
     [SerializeField] private float _winScore;
@@ -17,9 +17,12 @@ public class Game : MonoBehaviour
     private bool _isRunning;
     private string _gameOverMessage;
 
-    private void Awake()
+    private void Start()
     {
         StartGame();
+
+        _character.Freeze();
+        _isRunning = false;
     }
 
     private void Update()
@@ -37,12 +40,12 @@ public class Game : MonoBehaviour
             LoseGame();
 
         UpdateScore();
-        _bird.InputJump();
+        _character.InputJump();
     }
 
     private bool IsOutOfBoundary()
     {
-        Vector3 targetPosition = _bird.transform.position;
+        Vector3 targetPosition = _character.transform.position;
 
         return targetPosition.x > _boundaryLimit.x ||
             targetPosition.x < -_boundaryLimit.x ||
@@ -63,30 +66,30 @@ public class Game : MonoBehaviour
 
     private void SetupBird()
     {
-        _bird.gameObject.On();
+        _character.gameObject.On();
 
-        _bird.Teleport(_defaultBirdPosition);
-        _bird.ResetJumpCounter();
-        _bird.Unfreeze();
+        _character.Teleport(_defaultBirdPosition);
+        _character.ResetJumpCounter();
+        _character.Unfreeze();
     }
 
     private void UpdateScore()
         => Score.SetValue(
-            (_bird.VerticalJumpCounter * _verticalScoreAdd) +
-            (_bird.HorizontalJumpCounter * _horizontalScoreAdd)
+            (_character.Jump.VerticalCounter * _verticalScoreAdd) +
+            (_character.Jump.HorizontalCounter * _horizontalScoreAdd)
         );
 
     private void WinGame()
     {
         _gameOverMessage = Message.Win;
-        _bird.Freeze();
+        _character.Freeze();
         _isRunning = false;
     }
 
     private void LoseGame()
     {
         _gameOverMessage = Message.Lose;
-        _bird.gameObject.Off();
+        _character.Kill();
         _isRunning = false;
     }
 

@@ -9,8 +9,8 @@ public class Boundary : MonoBehaviour
 
     public void Setup(Vector2 limit)
     {
-        _leftBoundary.transform.position = new Vector3(-limit.x, 0, 0);
-        _rightBoundary.transform.position = new Vector3(limit.x, 0, 0);
+        // _leftBoundary.transform.position = new Vector3(-limit.x, 0, 0);
+        // _rightBoundary.transform.position = new Vector3(limit.x, 0, 0);
 
         _upperBoundary.transform.position = new Vector3(0, limit.y, 0);
         _lowerBoundary.transform.position = new Vector3(0, -limit.y, 0);
