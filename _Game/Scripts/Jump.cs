@@ -2,17 +2,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class CharacterJump
+public class Jump
 {
     private CharacterVfx _vfx;
-    private float _horizontalMultiplier;
+    private Animator _animator;
 
-    public CharacterJump(CharacterVfx vfx, Rigidbody rigidbody, Vector3 jumpForce, float horizontalMultiplier)
+    public Jump(Rigidbody rigidbody, Vector3 jumpForce, Animator animator, CharacterVfx vfx)
     {
-        _vfx = vfx;
         _rigidbody = rigidbody;
         _jumpForce = jumpForce;
-        _horizontalMultiplier = horizontalMultiplier;
+        _animator = animator;
+        _vfx = vfx;
     }
 
     public int VerticalCounter { get; private set; }
@@ -28,16 +28,20 @@ public class CharacterJump
 
         VerticalCounter++;
 
+        _animator.SetTrigger(AnimationKey.Jump);
         _vfx.Jump();
     }
 
-    public void Horizontal(float forceX)
+    public void Horizontal(bool isRight, float multiplier)
     {
+        float forceX = isRight ? _jumpForce.x : -_jumpForce.x;
+
         _rigidbody.velocity = Vector3.zero;
-        _rigidbody.AddForce(new Vector3(forceX, _jumpForce.y * _horizontalMultiplier, 0), ForceMode.Impulse);
+        _rigidbody.AddForce(new Vector3(forceX, _jumpForce.y * multiplier, 0), ForceMode.Impulse);
 
         HorizontalCounter++;
 
+        _animator.SetTrigger(AnimationKey.Jump);
         _vfx.Jump();
     }
 

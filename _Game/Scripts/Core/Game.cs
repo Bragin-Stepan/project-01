@@ -9,7 +9,7 @@ public class Game : MonoBehaviour
     [SerializeField] private int _verticalScoreAdd = 1;
     [SerializeField] private int _horizontalScoreAdd = 3;
 
-    [SerializeField] private Vector3 _defaultBirdPosition = new Vector3(0, 0.5f, 0);
+    [SerializeField] private Vector3 _defaultCharacterPosition = new Vector3(0, 0.5f, 0);
     [SerializeField] private Vector2 _boundaryLimit = new Vector2(6f, 5f);
 
     [SerializeField] private bool _showDebugGui;
@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.KeypadEnter))
             StartGame();
 
         if (_isRunning == false)
@@ -40,7 +40,6 @@ public class Game : MonoBehaviour
             LoseGame();
 
         UpdateScore();
-        _character.InputJump();
     }
 
     private bool IsOutOfBoundary()
@@ -68,7 +67,7 @@ public class Game : MonoBehaviour
     {
         _character.gameObject.On();
 
-        _character.Teleport(_defaultBirdPosition);
+        _character.Teleport(_defaultCharacterPosition);
         _character.ResetJumpCounter();
         _character.Unfreeze();
     }
@@ -97,10 +96,10 @@ public class Game : MonoBehaviour
     {
         if (_showDebugGui)
         {
-            GUI.Label(new Rect(20, 10, 200, 20), Message.Controls);
-            GUI.Label(new Rect(20, 30, 200, 20), Message.Restart);
-            GUI.Label(new Rect(20, 50, 200, 20), Message.Score + " " + Score.Value + " / " + _winScore);
-            GUI.Label(new Rect(20, 70, 200, 20), _gameOverMessage);
+            GUI.Label(new Rect(20, 20, 200, 20), Message.Controls);
+            GUI.Label(new Rect(20, 40, 200, 20), Message.Restart);
+            GUI.Label(new Rect(20, 60, 200, 20), Message.Score + " " + Score.Value + " / " + _winScore);
+            GUI.Label(new Rect(20, 80, 200, 20), _gameOverMessage);
         }
     }
 }

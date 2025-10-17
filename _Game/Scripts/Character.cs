@@ -7,47 +7,67 @@ public class Character : MonoBehaviour
     [SerializeField] private float _horizontalJumpMultiplier;
     [SerializeField] private float _addScalePerJump = 0.1f;
 
-    public CharacterJump Jump { get; private set; }
+    public Jump Jump { get; private set; }
 
     private CharacterVfx _vfx;
     private Rigidbody _rigidbody;
+    private Animator _animator;
 
-    private float _defaultScale;
-    private float _targetScale;
-    private float MaxScale => _defaultScale * 1.5f;
+    private bool _isFreezed;
+    private float _defaultCharacterScale;
+    private float _characterScale;
+    private float MaxCharacterScale => _defaultCharacterScale * 1.5f;
 
     private void Awake()
     {
-        _defaultScale = _targetScale = transform.localScale.x;
+        _defaultCharacterScale = _characterScale = transform.localScale.x;
 
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
         _vfx = GetComponentInChildren<CharacterVfx>();
 
-        Jump = new CharacterJump(_vfx, _rigidbody, _jumpForce, _horizontalJumpMultiplier);
+        Jump = new Jump(_rigidbody, _jumpForce, _animator, _vfx);
     }
 
-    public void InputJump()
+    private void Update()
     {
         UpdateScale();
 
+        if (_isFreezed)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            IncreaseCharacterScale();
             Jump.Base();
+        }
 
         if (Input.GetKeyDown(KeyCode.A))
-            Jump.Horizontal(-_jumpForce.x);
+        {
+            IncreaseCharacterScale();
+            Jump.Horizontal(false, _horizontalJumpMultiplier);
+        }
 
         if (Input.GetKeyDown(KeyCode.D))
-            Jump.Horizontal(_jumpForce.x);
+        {
+            IncreaseCharacterScale();
+            Jump.Horizontal(true, _horizontalJumpMultiplier);
+        }
     }
 
     public void ResetJumpCounter() => Jump.ResetCounter();
 
     public void Teleport(Vector3 position) => transform.position = position;
 
-    public void Freeze() => _rigidbody.isKinematic = true;
+    public void Freeze()
+    {
+        _isFreezed = true;
+        _rigidbody.isKinematic = true;
+    }
 
     public void Unfreeze()
     {
+        _isFreezed = false;
         _rigidbody.isKinematic = false;
         _rigidbody.velocity = Vector3.zero;
     }
@@ -59,19 +79,19 @@ public class Character : MonoBehaviour
         gameObject.Off();
     }
 
-    private void IncreaseTargetScale()
+    private void IncreaseCharacterScale()
     {
-        _targetScale += _addScalePerJump;
+        _characterScale += _addScalePerJump;
 
-        if (_targetScale > MaxScale)
-            _targetScale = MaxScale;
+        if (_characterScale > MaxCharacterScale)
+            _characterScale = MaxCharacterScale;
     }
 
     private void UpdateScale()
     {
-        if (_targetScale > _defaultScale)
-            _targetScale -= Time.deltaTime;
+        if (_characterScale > _defaultCharacterScale)
+            _characterScale -= Time.deltaTime;
 
-        transform.localScale = new Vector3(_targetScale, _targetScale, _targetScale);
+        transform.localScale = new Vector3(_characterScale, _characterScale, _characterScale);
     }
 }
